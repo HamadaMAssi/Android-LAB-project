@@ -394,13 +394,13 @@
                 android:textColor="@color/color1" />
 
             <Button
-                android:id="@+id/adminSignUpButton"
+                android:id="@+id/instructorSignUpButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/btn_style"
                 android:padding="5dp"
-                android:text="@string/sign_up_as_admin"
+                android:text="@string/sign_up_as_instructor"
                 android:textColor="@color/color1" />
 
             <Button

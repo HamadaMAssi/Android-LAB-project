@@ -16,7 +16,7 @@ import android.widget.PopupWindow;
 public class TraineeSignUpActivity extends AppCompatActivity {
 
     private ImageView back;
-    private Button signUpButton, cancelButton, adminSignUpButton, studentSignUpButton;
+    private Button signUpButton, cancelButton, adminSignUpButton, instructorSignUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class TraineeSignUpActivity extends AppCompatActivity {
         signUpButton = (Button) findViewById(R.id.signUpButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         adminSignUpButton = (Button) findViewById(R.id.adminSignUpButton);
-        studentSignUpButton = (Button) findViewById(R.id.studentSignUpButton);
+        instructorSignUpButton = (Button) findViewById(R.id.instructorSignUpButton);
         back = findViewById(R.id.back);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +57,7 @@ public class TraineeSignUpActivity extends AppCompatActivity {
                 finish();
             }
         });
-        studentSignUpButton.setOnClickListener(new View.OnClickListener() {
+        instructorSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TraineeSignUpActivity.this,TraineeSignUpActivity.class);

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 public class AdminSignUpActivity extends AppCompatActivity {
 
     private ImageView back;
-    private Button signUpButton, cancelButton, adminSignUpButton, studentSignUpButton;
+    private Button signUpButton, cancelButton, instructorSignUpButton, studentSignUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class AdminSignUpActivity extends AppCompatActivity {
 
         signUpButton = (Button) findViewById(R.id.signUpButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
-        adminSignUpButton = (Button) findViewById(R.id.adminSignUpButton);
+        instructorSignUpButton = (Button) findViewById(R.id.instructorSignUpButton);
         studentSignUpButton = (Button) findViewById(R.id.studentSignUpButton);
         back = findViewById(R.id.back);
 
@@ -44,7 +44,7 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 finish();
             }
         });
-        adminSignUpButton.setOnClickListener(new View.OnClickListener() {
+        instructorSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminSignUpActivity.this,AdminSignUpActivity.class);
