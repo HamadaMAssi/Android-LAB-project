@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -71,8 +72,16 @@ public class MainActivity2 extends AppCompatActivity {
                 Instructor_Data.moveToNext();
                 if(Admin_Data.getString(0) != null){
                     Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getString(4));
+                    /*Intent intent = new Intent(MainActivity2.this,.class);
+                    intent.putExtra("User", admin);
+                    MainActivity2.this.startActivity(intent);
+                    finish();*/
                 } else if (Trainee_Data.getString(0) != null) {
                     Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getString(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
+                    /*Intent intent = new Intent(MainActivity2.this,.class);
+                    intent.putExtra("User", trainee);
+                    MainActivity2.this.startActivity(intent);
+                    finish();*/
                 } else if (Instructor_Data.getString(0) != null) {
                     Cursor Instructor_Courses = databasehelper.getInstCourses(email);
                     ArrayList<String> Courses = new ArrayList<String>();
@@ -80,12 +89,17 @@ public class MainActivity2 extends AppCompatActivity {
                         Courses.add(Instructor_Courses.getString(0));
                     }
                     Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getString(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
+                    /*Intent intent = new Intent(MainActivity2.this,.class);
+                    intent.putExtra("User", instructor);
+                    MainActivity2.this.startActivity(intent);
+                    finish();*/
+                } else {
+                    Toast toast =Toast.makeText(MainActivity2.this,
+                            "Wrong Email or Password \n Try Again!",Toast.LENGTH_SHORT);
+                    toast.show();
                 }
 
-                /*Intent intent = new Intent(MainActivity2.this,Level1.class);
-                intent.putExtra("playerName", playerName);
-                EndActivity.this.startActivity(intent);
-                finish();*/
+
             }
         });
     }
