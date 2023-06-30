@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -64,6 +68,47 @@ public class MainActivity2 extends AppCompatActivity {
                         editor.putBoolean("FLAG", true);
                         editor.commit();
                     }
+                }
+                DataBaseHelper databasehelper = new DataBaseHelper(MainActivity2.this, "train", null, 1);
+                Cursor Admin_Data = databasehelper.getAdminByEmail(email);
+                Cursor Trainee_Data = databasehelper.getTraineeByEmail(email);
+                Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
+
+                if(Admin_Data.moveToNext()){
+                    Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getString(4));
+                    Intent intent = new Intent(MainActivity2.this,AdminMainActivity.class);
+                    intent.putExtra("email", admin.getEmail_Address());
+                    intent.putExtra("firstName", admin.getFirst_Name());
+                    intent.putExtra("lastName", admin.getLast_Name());
+                    intent.putExtra("password", admin.getPassword());
+                    MainActivity2.this.startActivity(intent);
+                    finish();
+                } else if (Trainee_Data.moveToNext()) {
+                    Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getString(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
+                    Intent intent = new Intent(MainActivity2.this,TraineeMainActivity.class);
+                    intent.putExtra("email", trainee.getEmail_Address());
+                    intent.putExtra("firstName", trainee.getFirst_Name());
+                    intent.putExtra("lastName", trainee.getLast_Name());
+                    intent.putExtra("password", trainee.getPassword());
+                    intent.putExtra("mobileNumber", trainee.getMobile_Number());
+                    intent.putExtra("address", trainee.getAddress());
+                    MainActivity2.this.startActivity(intent);
+                    finish();
+                } else if (Instructor_Data.moveToNext()) {
+                    Cursor Instructor_Courses = databasehelper.getInstCourses(email);
+                    ArrayList<String> Courses = new ArrayList<String>();
+                    while (Instructor_Courses.moveToNext()) {
+                        Courses.add(Instructor_Courses.getString(0));
+                    }
+                    Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getString(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
+                    Intent intent = new Intent(MainActivity2.this,InstructorMainActivity.class);
+
+                    MainActivity2.this.startActivity(intent);
+                    finish();
+                } else {
+                    Toast toast =Toast.makeText(MainActivity2.this,
+                            "Wrong Email or Password \n Try Again!",Toast.LENGTH_SHORT);
+                    toast.show();
                 }
             }
         });

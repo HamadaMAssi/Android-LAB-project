@@ -7,12 +7,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class InstructorSignUpActivity extends AppCompatActivity {
 
     private ImageView back;
     private Button signUpButton, cancelButton, adminSignUpButton, studentSignUpButton;
+    private EditText emailText;
+    private EditText firstNameText;
+    private EditText lastNameText;
+    private EditText passwordText;
+    private EditText confirmPasswordText;
+    private EditText mobileNumberText;
+    private EditText addressText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
