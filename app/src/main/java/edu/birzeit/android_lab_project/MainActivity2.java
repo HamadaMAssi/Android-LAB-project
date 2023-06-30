@@ -2,13 +2,18 @@ package edu.birzeit.android_lab_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -20,6 +25,8 @@ public class MainActivity2 extends AppCompatActivity {
     private EditText Password;
     private CheckBox checkBox;
     private Button SignInButton;
+    private Button SignUpButton;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,50 @@ public class MainActivity2 extends AppCompatActivity {
                 }
 
 
+            }
+        });
+        SignUpButton = (Button) findViewById(R.id.SignUpButton);
+        SignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Inflate the popup window layout
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View viewPopupwindow = layoutInflater.inflate(R.layout.popup_window, null);
+
+                // Find the buttons in popupwindow
+                Button studentSignUpButtonPopup = viewPopupwindow.findViewById(R.id.studentSignUpButton);
+                Button instructorSignUpButtonPopup = viewPopupwindow.findViewById(R.id.instructorSignUpButton);
+                Button adminSignUpButtonPopup = viewPopupwindow.findViewById(R.id.adminSignUpButton);
+
+                studentSignUpButtonPopup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity2.this,TraineeSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                instructorSignUpButtonPopup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity2.this,InstructorSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                adminSignUpButtonPopup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity2.this,AdminSignUpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                // Create and show the popup window
+                popupWindow = new PopupWindow(viewPopupwindow, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+                popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
             }
         });
     }

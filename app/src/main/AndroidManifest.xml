@@ -12,6 +12,15 @@
         android:theme="@style/Theme.AndroidLABproject"
         tools:targetApi="31">
         <activity
+            android:name=".AdminSignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InstructorSignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TraineeSignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminMainActivity"
             android:exported="false" />
         <activity
