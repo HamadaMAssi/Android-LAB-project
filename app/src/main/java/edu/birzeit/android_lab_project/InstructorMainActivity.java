@@ -89,6 +89,17 @@ public class InstructorMainActivity extends AppCompatActivity implements Navigat
             case R.id.nav_rate:
                 Toast.makeText(this, "rate!", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.nav_ViewCoursesPreviouslyTaught:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewCoursesPreviouslyTaughtFragment()).commit();
+                break;
+
+            case R.id.nav_ViewCurrentSchedule:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewCurrentScheduleFragment()).commit();
+                break;
+
+            case R.id.nav_ViewListOfStudentsInCourse:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewListStudentsFragment()).commit();
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/nav_home"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/nav_settings"
+            android:title="Settings"/>
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/nav_about"
+            android:title="About Us"/>
+    </group>
+    <item
+        android:title="profile">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/nav_account"
+                android:title="My Account"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/nav_logout"
+                android:title="Logout"/>
+        </menu>
+    </item>
+    <item
+        android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_createNewCourse"
+                android:icon="@drawable/nav_add"
+                android:title="Create a new course"/>
+            <item
+                android:id="@+id/nav_editOrDelete"
+                android:icon="@drawable/nav_edit"
+                android:title="Edit or delete course"/>
+            <item
+                android:id="@+id/nav_makeAvailable"
+                android:icon="@drawable/nav_available"
+                android:title="Make a course available"/>
+            <item
+                android:id="@+id/nav_takeDecisions"
+                android:icon="@drawable/nav_check"
+                android:title="Take decisions (Accept/Reject)"/>
+            <item
+                android:id="@+id/nav_viewProfiles"
+                android:icon="@drawable/nav_account"
+                android:title="View users profiles"/>
+            <item
+                android:id="@+id/nav_viewOfferingHistory"
+                android:icon="@drawable/nav_history"
+                android:title="View offering history"/>
+        </menu>
+    </item>
+    <item
+        android:title="Communication">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/nav_share"
+                android:title="Share"/>
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/nav_rate"
+                android:title="Rate App"/>
+        </menu>
+    </item>
+</menu>

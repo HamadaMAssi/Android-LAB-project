@@ -142,6 +142,29 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
             case R.id.nav_rate:
                 Toast.makeText(this, "rate!", Toast.LENGTH_SHORT).show();
                 break;
+
+            case R.id.nav_createNewCourse:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new CreateNewCourseFragment()).commit();
+                break;
+
+            case R.id.nav_editOrDelete:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new EditDeleteCourseFragment()).commit();
+                break;
+
+            case R.id.nav_makeAvailable:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MakeCourseAvailableFragment()).commit();
+                break;
+
+            case R.id.nav_takeDecisions:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TakeDecisionsFragment()).commit();
+                break;
+            case R.id.nav_viewProfiles:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewProfilesFragment()).commit();
+                break;
+
+            case R.id.nav_viewOfferingHistory:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewOfferingHistoryFragment()).commit();
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

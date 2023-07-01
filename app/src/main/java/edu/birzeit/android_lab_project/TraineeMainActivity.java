@@ -89,6 +89,21 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
             case R.id.nav_rate:
                 Toast.makeText(this, "rate!", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.nav_SearchCourses:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SearchCoursesFragment()).commit();
+                break;
+
+            case R.id.nav_enrollCourse:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new EnrollInCourseFragment()).commit();
+                break;
+
+            case R.id.nav_previousCourses:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewOldCoursesFragment()).commit();
+                break;
+
+            case R.id.nav_coursesHistory:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ViewCenterCourseFragment()).commit();
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

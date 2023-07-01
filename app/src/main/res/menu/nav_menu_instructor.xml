@@ -36,6 +36,23 @@
         </menu>
     </item>
     <item
+        android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_ViewCoursesPreviouslyTaught"
+                android:icon="@drawable/nav_list"
+                android:title="courses"/>
+            <item
+                android:id="@+id/nav_ViewCurrentSchedule"
+                android:icon="@drawable/nav_schedule"
+                android:title="Schedule"/>
+            <item
+                android:id="@+id/nav_ViewListOfStudentsInCourse"
+                android:icon="@drawable/nav_list"
+                android:title="List of students"/>
+        </menu>
+    </item>
+    <item
         android:title="Communication">
         <menu>
             <item
@@ -48,5 +65,4 @@
                 android:title="Rate App"/>
         </menu>
     </item>
-
 </menu>
