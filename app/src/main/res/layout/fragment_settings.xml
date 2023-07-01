@@ -5,12 +5,12 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="?attr/background">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="?attr/background"
         android:orientation="vertical"
         android:paddingVertical="100dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
 
             <TextView
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:text="Language" />
@@ -45,7 +45,7 @@
 
             <TextView
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:text="Notifications" />
@@ -68,7 +68,7 @@
 
             <TextView
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:padding="20dp"
                 android:text="Appearance" />
@@ -137,7 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/color1"
+            android:background="@color/border_color"
             android:padding="25dp"
             android:text="Cancel" />
 

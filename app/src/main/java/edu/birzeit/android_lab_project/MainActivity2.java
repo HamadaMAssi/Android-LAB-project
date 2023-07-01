@@ -62,12 +62,10 @@ public class MainActivity2 extends AppCompatActivity {
                 String password = Password.getText().toString();
 
                 if(checkBox.isChecked()){
-                    if(!flag) {
                         editor.putString("EMAIL", email);
                         editor.putString("PASS", password);
                         editor.putBoolean("FLAG", true);
                         editor.commit();
-                    }
                 }
                 DataBaseHelper databasehelper = new DataBaseHelper(MainActivity2.this, "train", null, 1);
                 Cursor Admin_Data = databasehelper.getAdminByEmail(email);
