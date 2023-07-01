@@ -45,7 +45,7 @@
             <item
                 android:id="@+id/nav_rate"
                 android:icon="@drawable/nav_rate"
-                android:title="Logout"/>
+                android:title="Rate App"/>
         </menu>
     </item>
 

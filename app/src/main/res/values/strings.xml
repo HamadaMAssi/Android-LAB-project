@@ -25,4 +25,10 @@
     <string name="sign_up_as_instructor">Sign up as Instructor</string>
     <string name="sign_up_as_admin_title">Sign up as Admin</string>
     <string name="register_as_a_student">Register as a student</string>
+    <string name="add_course">Add Course</string>
+    <string name="edit_delete">Edit/Delete</string>
+    <string name="make_available">Make available</string>
+    <string name="take_decisions">Take decisions</string>
+    <string name="view_profiles">View Profiles</string>
+    <string name="offering_history">Offering history</string>
 </resources>
