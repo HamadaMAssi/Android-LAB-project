@@ -130,6 +130,9 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
 
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AdminMainActivity.this,MainActivity2.class);
+                AdminMainActivity.this.startActivity(intent);
+                finish();
                 break;
 
             case R.id.nav_share:

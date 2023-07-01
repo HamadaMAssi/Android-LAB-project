@@ -73,39 +73,68 @@ public class MainActivity2 extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
 
                 if(Admin_Data.moveToNext()){
-                    Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getString(4));
-                    Intent intent = new Intent(MainActivity2.this,AdminMainActivity.class);
-                    intent.putExtra("email", admin.getEmail_Address());
-                    intent.putExtra("firstName", admin.getFirst_Name());
-                    intent.putExtra("lastName", admin.getLast_Name());
-                    intent.putExtra("password", admin.getPassword());
-                    MainActivity2.this.startActivity(intent);
-                    finish();
-                } else if (Trainee_Data.moveToNext()) {
-                    Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getString(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
-                    Intent intent = new Intent(MainActivity2.this,TraineeMainActivity.class);
-                    intent.putExtra("email", trainee.getEmail_Address());
-                    intent.putExtra("firstName", trainee.getFirst_Name());
-                    intent.putExtra("lastName", trainee.getLast_Name());
-                    intent.putExtra("password", trainee.getPassword());
-                    intent.putExtra("mobileNumber", trainee.getMobile_Number());
-                    intent.putExtra("address", trainee.getAddress());
-                    MainActivity2.this.startActivity(intent);
-                    finish();
-                } else if (Instructor_Data.moveToNext()) {
-                    Cursor Instructor_Courses = databasehelper.getInstCourses(email);
-                    ArrayList<String> Courses = new ArrayList<String>();
-                    while (Instructor_Courses.moveToNext()) {
-                        Courses.add(Instructor_Courses.getString(0));
+                    System.out.println(password+"---"+Admin_Data.getString(3));
+                    if (password.equals(Admin_Data.getString(3))){
+                        Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getString(4));
+                        Intent intent = new Intent(MainActivity2.this,AdminMainActivity.class);
+                        intent.putExtra("email", admin.getEmail_Address());
+                        intent.putExtra("firstName", admin.getFirst_Name());
+                        intent.putExtra("lastName", admin.getLast_Name());
+                        intent.putExtra("password", admin.getPassword());
+                        MainActivity2.this.startActivity(intent);
+                        finish();
+                    } else {
+                        Toast toast =Toast.makeText(MainActivity2.this,
+                                "Wrong Password \n Try Again!",Toast.LENGTH_SHORT);
+                        toast.show();
                     }
-                    Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getString(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
-                    Intent intent = new Intent(MainActivity2.this,InstructorMainActivity.class);
 
-                    MainActivity2.this.startActivity(intent);
-                    finish();
+                } else if (Trainee_Data.moveToNext()) {
+                    if (password.equals(Trainee_Data.getString(3))){
+                        Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getString(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
+                        Intent intent = new Intent(MainActivity2.this,TraineeMainActivity.class);
+                        intent.putExtra("email", trainee.getEmail_Address());
+                        intent.putExtra("firstName", trainee.getFirst_Name());
+                        intent.putExtra("lastName", trainee.getLast_Name());
+                        intent.putExtra("password", trainee.getPassword());
+                        intent.putExtra("mobileNumber", trainee.getMobile_Number());
+                        intent.putExtra("address", trainee.getAddress());
+                        MainActivity2.this.startActivity(intent);
+                        finish();
+                    } else {
+                        Toast toast =Toast.makeText(MainActivity2.this,
+                                "Wrong Password \n Try Again!",Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+                } else if (Instructor_Data.moveToNext()) {
+                    if (password.equals(Instructor_Data.getString(3))){
+                        Cursor Instructor_Courses = databasehelper.getInstCourses(email);
+                        ArrayList<String> Courses = new ArrayList<String>();
+                        while (Instructor_Courses.moveToNext()) {
+                            Courses.add(Instructor_Courses.getString(0));
+                        }
+                        Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getString(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
+                        Intent intent = new Intent(MainActivity2.this,InstructorMainActivity.class);
+                        intent.putExtra("email", instructor.getEmail_Address());
+                        intent.putExtra("firstName", instructor.getFirst_Name());
+                        intent.putExtra("lastName", instructor.getLast_Name());
+                        intent.putExtra("password", instructor.getPassword());
+                        intent.putExtra("mobileNumber", instructor.getMobile_Number());
+                        intent.putExtra("address", instructor.getAddress());
+                        intent.putExtra("specialization", instructor.getSpecialization());
+                        intent.putExtra("degree", instructor.getDegree());
+                        MainActivity2.this.startActivity(intent);
+                        finish();
+                    } else {
+                        Toast toast =Toast.makeText(MainActivity2.this,
+                                "Wrong Password \n Try Again!",Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
                 } else {
                     Toast toast =Toast.makeText(MainActivity2.this,
-                            "Wrong Email or Password \n Try Again!",Toast.LENGTH_SHORT);
+                            "Wrong Email\n Try Again!",Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }

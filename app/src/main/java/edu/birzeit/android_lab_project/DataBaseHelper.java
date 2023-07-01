@@ -16,13 +16,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE Course(ID SERIAL PRIMARY KEY,COURSE_TITLE TEXT UNIQUE, MAIN_TOPICS TEXT, PREREQUISITES TEXT,  PHOTO TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE Admin(ID SERIAL PRIMARY KEY,Email_Address TEXT UNIQUE, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE Trainee(ID SERIAL PRIMARY KEY,Email_Address TEXT UNIQUE, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE Instructor(ID SERIAL PRIMARY KEY,Email_Address TEXT UNIQUE, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT, Specialization TEXT, Degree TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Course(COURSE_TITLE TEXT PRIMARY KEY, MAIN_TOPICS TEXT, PREREQUISITES TEXT,  PHOTO TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Admin(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Trainee(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Instructor(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT, Specialization TEXT, Degree TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE InstCourses(COURSE_TITLE SERIAL, Email_Address SERIAL, PRIMARY KEY (COURSE_TITLE,Email_Address))");
         sqLiteDatabase.execSQL("CREATE TABLE Registration(ID SERIAL PRIMARY KEY, COURSE_TITLE TEXT, Instructor_Name TEXT, Deadline TEXT, Start_Date TEXT, schedule TEXT, venue TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(ID SERIAL, trainee_ID SERIAL, Registration_ID SERIAL, PRIMARY KEY (trainee_ID,Registration_ID))");
+        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(trainee_ID SERIAL, Registration_ID SERIAL, PRIMARY KEY (trainee_ID,Registration_ID))");
 
     }
 
@@ -80,11 +80,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert("Instructor", null, contentValues);
     }
 
-    public void newInstCourses(int COURSE_ID, int instructor_ID) {
+    public void newInstCourses(String COURSE_TITLE, String Email_Address) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("COURSE_ID", COURSE_ID);
-        contentValues.put("instructor_ID", instructor_ID);
+        contentValues.put("COURSE_TITLE", COURSE_TITLE);
+        contentValues.put("Email_Address", Email_Address);
         sqLiteDatabase.insert("InstCourses", null, contentValues);
     }
 
