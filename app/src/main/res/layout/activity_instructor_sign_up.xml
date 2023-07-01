@@ -523,7 +523,6 @@
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:ems="9"
-                    android:inputType="phone"
                     android:paddingHorizontal="5dp"
                     android:text=""
                     android:textColor="@color/border_color_2" />

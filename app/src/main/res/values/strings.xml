@@ -31,4 +31,16 @@
     <string name="take_decisions">Take decisions</string>
     <string name="view_profiles">View Profiles</string>
     <string name="offering_history">Offering history</string>
+    <string name="Create_New_Course_Title">Create a New Course</string>
+    <string name="Course_Title">Course Title</string>
+    <string name="Course_Main_Topic">Course Main Topic</string>
+    <string name="prerequisites">Prerequisites</string>
+    <string name="Course_Photo">Photo</string>
+    <string name="Add_Course">Add Course</string>
+    <string name="select_course">Select Course</string>
+    <string name="instruction_name">Instruction Name</string>
+    <string name="start_date">Start Date</string>
+    <string name="schedule">Schedule</string>
+    <string name="venue">Venue</string>
+    <string name="add_registration">Add Registration</string>
 </resources>
