@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateNewCourseFragment">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/white"
         tools:context=".CreateNewCourseFragment">
 
@@ -20,16 +19,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/wave_signup">
-
-                <ImageView
-                    android:id="@+id/back"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    app:srcCompat="@drawable/arrow_back" />
+                android:layout_height="100dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -37,7 +27,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/Create_New_Course_Title"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color1"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -92,8 +82,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/checktrue"
-                        android:contentDescription="true" />
+                        android:contentDescription="true"
+                        app:srcCompat="@drawable/checktrue" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -120,7 +110,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:contentDescription="required"
-                        app:srcCompat="@drawable/asterisk"/>
+                        app:srcCompat="@drawable/asterisk" />
 
                 </LinearLayout>
 
@@ -148,8 +138,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/checktrue"
-                        android:contentDescription="true" />
+                        android:contentDescription="true"
+                        app:srcCompat="@drawable/checktrue" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -176,7 +166,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:contentDescription="required"
-                        app:srcCompat="@drawable/asterisk"/>
+                        app:srcCompat="@drawable/asterisk" />
 
                 </LinearLayout>
 
@@ -204,8 +194,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/checktrue"
-                        android:contentDescription="true" />
+                        android:contentDescription="true"
+                        app:srcCompat="@drawable/checktrue" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -232,7 +222,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:contentDescription="required"
-                        app:srcCompat="@drawable/asterisk"/>
+                        app:srcCompat="@drawable/asterisk" />
 
                 </LinearLayout>
 
@@ -285,6 +275,7 @@
 
 
             </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

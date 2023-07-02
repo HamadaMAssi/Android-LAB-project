@@ -85,7 +85,7 @@ public class CreateNewCourseFragment extends Fragment {
 
         addCourseButton = (Button) getActivity().findViewById(R.id.addCourseButton);
         cancelButton = (Button) getActivity().findViewById(R.id.cancelButton);
-        back = getActivity().findViewById(R.id.back);
+//        back = getActivity().findViewById(R.id.back);
 
         courseTitleText = (EditText) getActivity().findViewById(R.id.courseTitleText);
         courseMainTopicText = (EditText) getActivity().findViewById(R.id.courseMainTopicText);
@@ -100,14 +100,14 @@ public class CreateNewCourseFragment extends Fragment {
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
+//            }
+//        });
 
 
         final int[] i = {0};

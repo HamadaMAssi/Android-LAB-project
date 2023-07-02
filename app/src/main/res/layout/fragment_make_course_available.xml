@@ -19,16 +19,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/wave_signup">
-
-                <ImageView
-                    android:id="@+id/back"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    app:srcCompat="@drawable/arrow_back" />
+                android:layout_height="100dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -36,7 +27,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/add_registration"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color1"
                     android:textSize="24sp" />
             </LinearLayout>
 
