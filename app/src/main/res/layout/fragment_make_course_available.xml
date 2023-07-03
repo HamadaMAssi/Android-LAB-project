@@ -114,7 +114,7 @@
                     android:padding="5dp">
 
                     <Spinner
-                        android:id="@+id/instructionsSpinner"
+                        android:id="@+id/instructorsSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:spinnerMode="dropdown"
@@ -464,12 +464,6 @@
                         android:layout_height="wrap_content"
                         android:spinnerMode="dropdown" />
 
-                    <Spinner
-                        android:id="@+id/pmOrAmSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:spinnerMode="dropdown" />
 
 
 

@@ -68,31 +68,42 @@ public class InstructorSignUpActivity extends AppCompatActivity {
             Courses.add(Courses_Data.getString(0));
         }
         CoursesLayout.removeAllViews();
+
         ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
         for (int i = 0; i<Courses.size(); i+=2){
             LinearLayout twoCourses = new LinearLayout(InstructorSignUpActivity.this);
-            if (!Courses.get(i).isEmpty() && !Courses.get(i+1).isEmpty()){
+            twoCourses.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.weight = 1.0f;
+            twoCourses.setLayoutParams(params);
+            twoCourses.setVisibility(View.VISIBLE);
+            if (Courses.size() > 1  && !Courses.get(i).isEmpty() && !Courses.get(i+1).isEmpty()){
                 CheckBox Course1 = new CheckBox(InstructorSignUpActivity.this);
-                Course1.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                Course1.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                 Course1.setText(Courses.get(i));
+                Course1.setChecked(false);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.weight = 1.0f;
+                Course1.setLayoutParams(layoutParams);
                 CheckBox Course2 = new CheckBox(InstructorSignUpActivity.this);
-                Course2.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                Course2.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                 Course2.setText(Courses.get(i+1));
-                twoCourses.addView(Course1);
-                twoCourses.addView(Course2);
+                Course2.setChecked(false);
+                Course2.setLayoutParams(layoutParams);
+                twoCourses.addView(Course1,layoutParams);
+                twoCourses.addView(Course2,layoutParams);
                 checkBoxes.add(Course1);
                 checkBoxes.add(Course2);
             } else {
                 CheckBox Course1 = new CheckBox(InstructorSignUpActivity.this);
-                Course1.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                Course1.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                 Course1.setText(Courses.get(i));
+                Course1.setChecked(false);
+                Course1.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.weight = 1.0f;
+                Course1.setLayoutParams(layoutParams);
                 twoCourses.addView(Course1);
                 checkBoxes.add(Course1);
             }
-            CoursesLayout.addView(twoCourses);
+            CoursesLayout.addView(twoCourses,params);
 
         }
 
@@ -150,7 +161,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                             if(selectedDegree != -1){
                                 RadioButton radioButton = (RadioButton) findViewById(selectedDegree);
                                 String degree = radioButton.getText().toString();
-                                ArrayList<String> Courses = getInstCources(checkBoxes);
+                                //ArrayList<String> Courses = getInstCources(checkBoxes);
                                 Instructor instructor = new Instructor(email,firstName,lastName,password,"no photo",mobileNumber,address,specialization,degree,Courses);
                                 databasehelper.newInstructor(instructor);
                                 for (int j=0; j<Courses.size(); j++){

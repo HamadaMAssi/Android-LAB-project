@@ -81,7 +81,7 @@ public class TraineeSignUpActivity extends AppCompatActivity {
         instructorSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TraineeSignUpActivity.this,TraineeSignUpActivity.class);
+                Intent intent = new Intent(TraineeSignUpActivity.this,InstructorSignUpActivity.class);
                 startActivity(intent);
                 finish();
             }

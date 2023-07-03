@@ -21,8 +21,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE Trainee(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Instructor(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT, Specialization TEXT, Degree TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE InstCourses(COURSE_TITLE SERIAL, Email_Address SERIAL, PRIMARY KEY (COURSE_TITLE,Email_Address))");
-        sqLiteDatabase.execSQL("CREATE TABLE Registration(ID SERIAL PRIMARY KEY, COURSE_TITLE TEXT, Instructor_Name TEXT, Deadline TEXT, Start_Date TEXT, schedule TEXT, venue TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(trainee_ID SERIAL, Registration_ID SERIAL, PRIMARY KEY (trainee_ID,Registration_ID))");
+        sqLiteDatabase.execSQL("CREATE TABLE Registration(ID SERIAL PRIMARY KEY, COURSE_TITLE TEXT, Email_Address TEXT, Deadline TEXT, Start_Date TEXT, schedule TEXT, venue TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(Email_Address TEXT, Registration_ID SERIAL,Reg_State BOOLEAN, PRIMARY KEY (Email_Address,Registration_ID))");
 
     }
 
@@ -92,7 +92,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("COURSE_TITLE", newRegistration.getCOURSE_TITLE());
-        contentValues.put("Instructor_Name", newRegistration.getInstructor_Name());
+        contentValues.put("InstructorEmail", newRegistration.getInstructorEmail());
         contentValues.put("Deadline", newRegistration.getDeadline());
         contentValues.put("Start_Date", newRegistration.getStart_Date());
         contentValues.put("schedule", newRegistration.getSchedule());
@@ -111,6 +111,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public Cursor getCourses() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT COURSE_TITLE FROM Course" , null);
+    }
+
+    public Cursor getInstructors() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT Email_Address,First_Name,Last_Name FROM Instructor" , null);
     }
 
     public Cursor getCourseInfo(String COURSE_TITLE) {

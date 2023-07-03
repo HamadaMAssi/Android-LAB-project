@@ -85,7 +85,6 @@ public class CreateNewCourseFragment extends Fragment {
 
         addCourseButton = (Button) getActivity().findViewById(R.id.addCourseButton);
         cancelButton = (Button) getActivity().findViewById(R.id.cancelButton);
-//        back = getActivity().findViewById(R.id.back);
 
         courseTitleText = (EditText) getActivity().findViewById(R.id.courseTitleText);
         courseMainTopicText = (EditText) getActivity().findViewById(R.id.courseMainTopicText);
@@ -100,14 +99,6 @@ public class CreateNewCourseFragment extends Fragment {
             }
         });
 
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
-//            }
-//        });
 
 
         final int[] i = {0};
@@ -115,20 +106,45 @@ public class CreateNewCourseFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String courseTitle = courseTitleText.getText().toString();
-                String courseMainTopic = courseMainTopicText.getText().toString();
-                String prerequisites = prerequisitesText.getText().toString();
-                DataBaseHelper databasehelper = new DataBaseHelper(requireActivity(), "train", null, 1);
-                Cursor Course_Data = databasehelper.getCourseInfo(courseTitle);
-                if(!Course_Data.moveToNext()){
-                    Course course = new Course(courseTitle,courseMainTopic,prerequisites,"no photo");
-                    databasehelper.newCourse(course);
+                if(courseTitle.isEmpty()){
                     Toast toast =Toast.makeText(requireActivity(),
-                            "Course Added successfully",Toast.LENGTH_SHORT);
+                            "please fill course title!",Toast.LENGTH_SHORT);
                     toast.show();
-                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
+                }else{
+                    String courseMainTopic = courseMainTopicText.getText().toString();
+                    if (courseMainTopic.isEmpty()){
+                        Toast toast =Toast.makeText(requireActivity(),
+                                "please fill course main topic!",Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else{
+                        String prerequisites = prerequisitesText.getText().toString();
+                        if (prerequisites.isEmpty()){
+                            Toast toast =Toast.makeText(requireActivity(),
+                                    "please fill course prerequisites!",Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else{
+                            DataBaseHelper databasehelper = new DataBaseHelper(requireActivity(), "train", null, 1);
+                            Cursor Course_Data = databasehelper.getCourseInfo(courseTitle);
+                            if(!Course_Data.moveToNext()){
+                                Course course = new Course(courseTitle,courseMainTopic,prerequisites,"no photo");
+                                databasehelper.newCourse(course);
+                                Toast toast =Toast.makeText(requireActivity(),
+                                        "Course Added successfully",Toast.LENGTH_SHORT);
+                                toast.show();
+                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
+                            } else {
+                                Toast toast =Toast.makeText(requireActivity(),
+                                        "The course title already exists",Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+
+                    }
+
                 }
+
             }
         });
     }

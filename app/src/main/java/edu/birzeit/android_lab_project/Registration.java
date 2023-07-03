@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Registration {
     private String COURSE_TITLE;
-    private String Instructor_Name;
+    private String InstructorEmail;
     private String Deadline;
     private String Start_Date;
     private String schedule;
@@ -12,9 +12,9 @@ public class Registration {
 
     private ArrayList<String> Students;
 
-    public Registration(String COURSE_TITLE, String instructor_Name, String deadline, String start_Date, String schedule, String venue) {
+    public Registration(String COURSE_TITLE, String instructorEmail, String deadline, String start_Date, String schedule, String venue) {
         this.COURSE_TITLE = COURSE_TITLE;
-        Instructor_Name = instructor_Name;
+        InstructorEmail = instructorEmail;
         Deadline = deadline;
         Start_Date = start_Date;
         this.schedule = schedule;
@@ -30,12 +30,12 @@ public class Registration {
         this.COURSE_TITLE = COURSE_TITLE;
     }
 
-    public String getInstructor_Name() {
-        return Instructor_Name;
+    public String getInstructorEmail() {
+        return InstructorEmail;
     }
 
-    public void setInstructor_Name(String instructor_Name) {
-        Instructor_Name = instructor_Name;
+    public void setInstructorEmail(String instructorEmail) {
+        InstructorEmail = instructorEmail;
     }
 
     public String getDeadline() {
