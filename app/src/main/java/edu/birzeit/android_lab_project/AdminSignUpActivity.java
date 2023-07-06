@@ -1,29 +1,42 @@
 package edu.birzeit.android_lab_project;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AdminSignUpActivity extends AppCompatActivity {
 
-    private ImageView back;
+    private ImageView back, imageViewPhoto;
     private Button signUpButton, cancelButton, instructorSignUpButton, studentSignUpButton;
     private EditText emailText;
     private EditText firstNameText;
     private EditText lastNameText;
     private EditText passwordText;
     private EditText confirmPasswordText;
+    private LinearLayout personalPhoto;
+    private TextView textPhoto;
+
+    private Uri imageUri;
+    private static final int GALLERY_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,19 +98,23 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 String lastName = lastNameText.getText().toString();
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
+                String photo = imageUri.toString();
+
+
                 DataBaseHelper databasehelper = new DataBaseHelper(AdminSignUpActivity.this, "train", null, 1);
                 Cursor Admin_Data = databasehelper.getAdminByEmail(email);
                 Cursor Trainee_Data = databasehelper.getTraineeByEmail(email);
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){
-                            Admin admin = new Admin(email,firstName,lastName,password,"no photo");
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageUri)){
+                            Admin admin = new Admin(email,firstName,lastName,password,photo);
                             databasehelper.newAdmin(admin);
                             Intent intent = new Intent(AdminSignUpActivity.this,AdminMainActivity.class);
                             intent.putExtra("email", admin.getEmail_Address());
                             intent.putExtra("firstName", admin.getFirst_Name());
                             intent.putExtra("lastName", admin.getLast_Name());
+                            intent.putExtra("password", admin.getPassword());
                             intent.putExtra("password", admin.getPassword());
                             AdminSignUpActivity.this.startActivity(intent);
                             finish();
@@ -115,6 +132,27 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        personalPhoto = findViewById(R.id.personalPhoto);
+        personalPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        imageUri = data.getData();
+        textPhoto = findViewById(R.id.textPhoto);
+        textPhoto.setText(imageUri.toString());
+        imageViewPhoto = findViewById(R.id.imageViewPhoto);
+        imageViewPhoto.setImageURI(imageUri);
     }
 
     public boolean validatePassword(String password) {
@@ -205,6 +243,16 @@ public class AdminSignUpActivity extends AppCompatActivity {
             toast.show();
             return false;
         }
+    }
 
+    public boolean validatePhoto(Uri p) {
+        if(p != null){
+            return true;
+        } else{
+            Toast toast =Toast.makeText(AdminSignUpActivity.this,
+                    "photo is empty",Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
     }
 }

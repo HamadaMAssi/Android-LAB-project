@@ -109,6 +109,7 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+
         switch (item.getItemId()) {
             case R.id.nav_home:
                 Toast.makeText(this, "home!", Toast.LENGTH_SHORT).show();

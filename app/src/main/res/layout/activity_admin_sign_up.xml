@@ -33,7 +33,10 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
+
         </LinearLayout>
+
+        <!--            app:srcCompat="@drawable/messi" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -230,6 +233,7 @@
                     android:layout_weight="1"
                     android:contentDescription="required"
                     app:srcCompat="@drawable/asterisk"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -357,6 +361,7 @@
 
 
                 <TextView
+                    android:id="@+id/textPhoto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -364,6 +369,13 @@
                     android:paddingVertical="8dp"
                     android:text="@string/choose_image"
                     android:textAlignment="center" />
+
+                <ImageView
+                    android:id="@+id/imageViewPhoto"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/nav_account" />
             </LinearLayout>
         </LinearLayout>
 
