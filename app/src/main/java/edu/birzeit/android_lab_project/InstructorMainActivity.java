@@ -9,11 +9,18 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InstructorMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -53,6 +60,29 @@ public class InstructorMainActivity extends AppCompatActivity implements Navigat
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InstructorHomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        View headerView = navigationView.getHeaderView(0);
+
+        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        TextView userName = headerView.findViewById(R.id.userName);
+
+
+        DataBaseHelper databasehelper = new DataBaseHelper(InstructorMainActivity.this, "train", null, 1);
+
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
+
+        Cursor cursor = databasehelper.getInstructorByEmail(email);
+        if (cursor.moveToFirst()) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(cursor.getBlob(4), 0, cursor.getBlob(4).length);
+            userImage.setImageBitmap(bitmap);
+            userName.setText(cursor.getString(0));
+        }
     }
 
     @Override
@@ -61,6 +91,7 @@ public class InstructorMainActivity extends AppCompatActivity implements Navigat
         switch (item.getItemId()) {
             case R.id.nav_home:
                 Toast.makeText(this, "home!", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InstructorHomeFragment()).commit();
                 break;
 
             case R.id.nav_settings:

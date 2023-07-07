@@ -2,19 +2,27 @@ package edu.birzeit.android_lab_project;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +45,11 @@ public class CreateNewCourseFragment extends Fragment {
     private EditText courseTitleText;
     private EditText courseMainTopicText;
     private EditText prerequisitesText;
+    private LinearLayout personalPhoto;
+    private TextView textPhoto;
+
+    private Uri imageUri;
+    private static final int GALLERY_REQUEST_CODE = 123;
 
 
     public CreateNewCourseFragment() {
@@ -98,8 +111,6 @@ public class CreateNewCourseFragment extends Fragment {
                         .replace(R.id.fragment_container, new AdminHomeFragment()).commit();
             }
         });
-
-
 
         final int[] i = {0};
         addCourseButton.setOnClickListener(new View.OnClickListener() {

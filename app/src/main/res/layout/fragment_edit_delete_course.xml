@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingVertical="25dp"
-            android:text="edit or delete fragment"
+            android:text="edit or delete Course"
             android:textAlignment="center"
             android:textColor="@color/color1"
             android:textSize="20sp"
@@ -50,6 +50,7 @@
             app:layout_constraintGuide_percent="0.1" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="32dp"

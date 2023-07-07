@@ -9,11 +9,17 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TraineeMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -53,6 +59,30 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TraineeHomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        View headerView = navigationView.getHeaderView(0);
+
+        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        TextView userName = headerView.findViewById(R.id.userName);
+
+
+        DataBaseHelper databasehelper = new DataBaseHelper(TraineeMainActivity.this, "train", null, 1);
+
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
+
+//        userImage.setImageURI(Uri.parse(intent.getStringExtra("photo")));
+//        userName.setText(email);
+
+        Trainee user = databasehelper.getTraineeObjectByEmail(email);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(user.getPersonal_Photo(), 0, user.getPersonal_Photo().length);
+        userImage.setImageBitmap(bitmap);
+        userName.setText(user.getEmail_Address());
     }
 
     @Override
@@ -61,6 +91,7 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
         switch (item.getItemId()) {
             case R.id.nav_home:
                 Toast.makeText(this, "home!", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TraineeHomeFragment()).commit();
                 break;
 
             case R.id.nav_settings:

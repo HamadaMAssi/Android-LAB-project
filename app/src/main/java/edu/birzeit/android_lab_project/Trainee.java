@@ -5,11 +5,11 @@ public class Trainee {
     private String First_Name;
     private String Last_Name;
     private String Password;
-    private String Personal_Photo;
+    private byte[] Personal_Photo;
     private String Mobile_Number;
     private String Address;
 
-    public Trainee(String email_Address, String first_Name, String last_Name, String password, String personal_Photo, String mobile_Number, String address) {
+    public Trainee(String email_Address, String first_Name, String last_Name, String password, byte[] personal_Photo, String mobile_Number, String address) {
         Email_Address = email_Address;
         First_Name = first_Name;
         Last_Name = last_Name;
@@ -51,11 +51,11 @@ public class Trainee {
         Password = password;
     }
 
-    public String getPersonal_Photo() {
+    public byte[] getPersonal_Photo() {
         return Personal_Photo;
     }
 
-    public void setPersonal_Photo(String personal_Photo) {
+    public void setPersonal_Photo(byte[] personal_Photo) {
         Personal_Photo = personal_Photo;
     }
 

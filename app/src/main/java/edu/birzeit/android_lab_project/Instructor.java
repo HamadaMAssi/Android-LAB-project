@@ -7,14 +7,25 @@ public class Instructor {
     private String First_Name;
     private String Last_Name;
     private String Password;
-    private String Personal_Photo;
+    private byte[] Personal_Photo;
     private String Mobile_Number;
     private String Address;
     private String Specialization;
     private String Degree;
     private ArrayList<String> Courses;
 
-    public Instructor(String email_Address, String first_Name, String last_Name, String password, String personal_Photo, String mobile_Number, String address, String specialization, String degree, ArrayList<String> courses) {
+    public Instructor(String email_Address, String first_Name, String last_Name, String password, byte[] personal_Photo, String mobile_Number, String address, String specialization, String degree) {
+        Email_Address = email_Address;
+        First_Name = first_Name;
+        Last_Name = last_Name;
+        Password = password;
+        Personal_Photo = personal_Photo;
+        Mobile_Number = mobile_Number;
+        Address = address;
+        Specialization = specialization;
+        Degree = degree;
+    }
+    public Instructor(String email_Address, String first_Name, String last_Name, String password, byte[] personal_Photo, String mobile_Number, String address, String specialization, String degree, ArrayList<String> courses) {
         Email_Address = email_Address;
         First_Name = first_Name;
         Last_Name = last_Name;
@@ -59,11 +70,11 @@ public class Instructor {
         Password = password;
     }
 
-    public String getPersonal_Photo() {
+    public byte[] getPersonal_Photo() {
         return Personal_Photo;
     }
 
-    public void setPersonal_Photo(String personal_Photo) {
+    public void setPersonal_Photo(byte[] personal_Photo) {
         Personal_Photo = personal_Photo;
     }
 

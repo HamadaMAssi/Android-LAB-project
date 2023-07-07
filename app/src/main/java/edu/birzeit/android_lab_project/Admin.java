@@ -5,9 +5,9 @@ public class Admin {
     private String First_Name;
     private String Last_Name;
     private String Password;
-    private String Personal_Photo;
+    private byte[] Personal_Photo;
 
-    public Admin(String email_Address, String first_Name, String last_Name, String password, String personal_Photo) {
+    public Admin(String email_Address, String first_Name, String last_Name, String password, byte[] personal_Photo) {
         Email_Address = email_Address;
         First_Name = first_Name;
         Last_Name = last_Name;
@@ -47,11 +47,11 @@ public class Admin {
         Password = password;
     }
 
-    public String getPersonal_Photo() {
+    public byte[] getPersonal_Photo() {
         return Personal_Photo;
     }
 
-    public void setPersonal_Photo(String personal_Photo) {
+    public void setPersonal_Photo(byte[] personal_Photo) {
         Personal_Photo = personal_Photo;
     }
 }

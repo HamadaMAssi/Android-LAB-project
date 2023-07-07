@@ -359,13 +359,20 @@
 
                 <TextView
                     android:id="@+id/textPhoto"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/border_color"
                     android:paddingVertical="8dp"
                     android:text="@string/choose_image"
                     android:textAlignment="center" />
+
+                <ImageView
+                    android:id="@+id/imageViewPhoto"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/nav_account" />
             </LinearLayout>
         </LinearLayout>
 

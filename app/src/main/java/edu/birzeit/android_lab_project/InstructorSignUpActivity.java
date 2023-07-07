@@ -1,10 +1,13 @@
 package edu.birzeit.android_lab_project;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,15 +17,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InstructorSignUpActivity extends AppCompatActivity {
 
-    private ImageView back;
+    private ImageView back, imageViewPhoto;
     private Button signUpButton, cancelButton, adminSignUpButton, studentSignUpButton;
     private LinearLayout CoursesLayout;
     private EditText emailText;
@@ -34,6 +41,11 @@ public class InstructorSignUpActivity extends AppCompatActivity {
     private EditText addressText;
     private EditText specializationText;
     private RadioGroup degreeRadioGroup;
+    private LinearLayout personalPhoto;
+    private TextView textPhoto;
+
+    private Uri imageUri;
+    private static final int GALLERY_REQUEST_CODE = 123;
 
 
     @Override
@@ -147,6 +159,13 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 String lastName = lastNameText.getText().toString();
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
+                byte[] imageData = new byte[0];
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                    imageData = getBytesFromInputStream(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 String mobileNumber = mobileNumberText.getText().toString();
                 String address = addressText.getText().toString();
                 String specialization = specializationText.getText().toString();
@@ -156,13 +175,13 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
                             int selectedDegree = degreeRadioGroup.getCheckedRadioButtonId();
                             if(selectedDegree != -1){
                                 RadioButton radioButton = (RadioButton) findViewById(selectedDegree);
                                 String degree = radioButton.getText().toString();
-                                //ArrayList<String> Courses = getInstCources(checkBoxes);
-                                Instructor instructor = new Instructor(email,firstName,lastName,password,"no photo",mobileNumber,address,specialization,degree,Courses);
+                                ArrayList<String> Courses = getInstCources(checkBoxes);
+                                Instructor instructor = new Instructor(email,firstName,lastName,password,imageData,mobileNumber,address,specialization,degree, Courses);
                                 databasehelper.newInstructor(instructor);
                                 for (int j=0; j<Courses.size(); j++){
                                     databasehelper.newInstCourses(Courses.get(j),email);
@@ -197,6 +216,36 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 }
             }
         });
+        personalPhoto = findViewById(R.id.personalPhoto);
+        personalPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+            }
+        });
+    }
+
+    private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, bytesRead);
+        }
+        return byteBuffer.toByteArray();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        imageUri = data.getData();
+        textPhoto = findViewById(R.id.textPhoto);
+        textPhoto.setText(imageUri.toString());
+        imageViewPhoto = findViewById(R.id.imageViewPhoto);
+        imageViewPhoto.setImageURI(imageUri);
     }
 
     public boolean validatePassword(String password) {
@@ -298,5 +347,15 @@ public class InstructorSignUpActivity extends AppCompatActivity {
             }
         }
         return Courses;
+    }
+    public boolean validatePhoto(byte [] p) {
+        if(p == null || p.length == 0 ){
+            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+                    "photo is empty",Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        } else{
+            return true;
+        }
     }
 }

@@ -75,12 +75,13 @@ public class MainActivity2 extends AppCompatActivity {
                 if(Admin_Data.moveToNext()){
                     System.out.println(password+"---"+Admin_Data.getString(3));
                     if (password.equals(Admin_Data.getString(3))){
-                        Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getString(4));
+                        Admin admin = new Admin(Admin_Data.getString(0),Admin_Data.getString(1),Admin_Data.getString(2),Admin_Data.getString(3),Admin_Data.getBlob(4));
                         Intent intent = new Intent(MainActivity2.this,AdminMainActivity.class);
                         intent.putExtra("email", admin.getEmail_Address());
                         intent.putExtra("firstName", admin.getFirst_Name());
                         intent.putExtra("lastName", admin.getLast_Name());
                         intent.putExtra("password", admin.getPassword());
+                        intent.putExtra("photo", admin.getPersonal_Photo());
                         MainActivity2.this.startActivity(intent);
                         finish();
                     } else {
@@ -91,7 +92,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                 } else if (Trainee_Data.moveToNext()) {
                     if (password.equals(Trainee_Data.getString(3))){
-                        Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getString(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
+                        Trainee trainee = new Trainee(Trainee_Data.getString(0),Trainee_Data.getString(1),Trainee_Data.getString(2),Trainee_Data.getString(3),Trainee_Data.getBlob(4),Trainee_Data.getString(5),Trainee_Data.getString(6));
                         Intent intent = new Intent(MainActivity2.this,TraineeMainActivity.class);
                         intent.putExtra("email", trainee.getEmail_Address());
                         intent.putExtra("firstName", trainee.getFirst_Name());
@@ -114,7 +115,7 @@ public class MainActivity2 extends AppCompatActivity {
                         while (Instructor_Courses.moveToNext()) {
                             Courses.add(Instructor_Courses.getString(0));
                         }
-                        Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getString(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
+                        Instructor instructor = new Instructor(Instructor_Data.getString(0),Instructor_Data.getString(1),Instructor_Data.getString(2),Instructor_Data.getString(3),Instructor_Data.getBlob(4),Instructor_Data.getString(5),Instructor_Data.getString(6),Instructor_Data.getString(7),Instructor_Data.getString(8),Courses);
                         Intent intent = new Intent(MainActivity2.this,InstructorMainActivity.class);
                         intent.putExtra("email", instructor.getEmail_Address());
                         intent.putExtra("firstName", instructor.getFirst_Name());

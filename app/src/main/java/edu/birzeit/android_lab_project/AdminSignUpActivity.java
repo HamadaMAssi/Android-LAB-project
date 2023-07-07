@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,7 +102,14 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 String lastName = lastNameText.getText().toString();
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
-                String photo = imageUri.toString();
+//                String photo = imageUri.toString();
+                byte[] imageData = new byte[0];
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                    imageData = getBytesFromInputStream(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 DataBaseHelper databasehelper = new DataBaseHelper(AdminSignUpActivity.this, "train", null, 1);
@@ -107,15 +118,15 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageUri)){
-                            Admin admin = new Admin(email,firstName,lastName,password,photo);
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
+                            Admin admin = new Admin(email,firstName,lastName,password,imageData);
                             databasehelper.newAdmin(admin);
                             Intent intent = new Intent(AdminSignUpActivity.this,AdminMainActivity.class);
                             intent.putExtra("email", admin.getEmail_Address());
                             intent.putExtra("firstName", admin.getFirst_Name());
                             intent.putExtra("lastName", admin.getLast_Name());
                             intent.putExtra("password", admin.getPassword());
-                            intent.putExtra("password", admin.getPassword());
+                            intent.putExtra("photo", admin.getPersonal_Photo());
                             AdminSignUpActivity.this.startActivity(intent);
                             finish();
                         }
@@ -144,6 +155,16 @@ public class AdminSignUpActivity extends AppCompatActivity {
         });
     }
 
+    private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, bytesRead);
+        }
+        return byteBuffer.toByteArray();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -245,14 +266,14 @@ public class AdminSignUpActivity extends AppCompatActivity {
         }
     }
 
-    public boolean validatePhoto(Uri p) {
-        if(p != null){
-            return true;
-        } else{
+    public boolean validatePhoto(byte [] p) {
+        if(p == null || p.length == 0 ){
             Toast toast =Toast.makeText(AdminSignUpActivity.this,
                     "photo is empty",Toast.LENGTH_SHORT);
             toast.show();
             return false;
+        } else{
+            return true;
         }
     }
 }

@@ -12,6 +12,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -26,6 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdminMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,6 +81,26 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AdminHomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+        View headerView = navigationView.getHeaderView(0);
+
+        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        TextView userName = headerView.findViewById(R.id.userName);
+
+
+        DataBaseHelper databasehelper = new DataBaseHelper(AdminMainActivity.this, "train", null, 1);
+
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
+
+//        userImage.setImageURI(Uri.parse(intent.getStringExtra("photo")));
+//        userName.setText(email);
+
+        Admin user = databasehelper.getAdminObjectByEmail(email);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(user.getPersonal_Photo(), 0, user.getPersonal_Photo().length);
+        userImage.setImageBitmap(bitmap);
+        userName.setText(user.getEmail_Address());
+
     }
 
     @Override
