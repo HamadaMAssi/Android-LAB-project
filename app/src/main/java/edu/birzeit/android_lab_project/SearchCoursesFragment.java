@@ -1,5 +1,6 @@
 package edu.birzeit.android_lab_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -65,6 +69,7 @@ public class SearchCoursesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=  inflater.inflate(R.layout.fragment_search_courses, container, false);
         DataBaseHelper databaseHelper = new DataBaseHelper(requireActivity(), "train", null, 1);
+
         myRecyclerView = view.findViewById(R.id.myRecyclerView);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         List<Registration> itemList = databaseHelper.getAllRegistrations();
@@ -76,6 +81,24 @@ public class SearchCoursesFragment extends Fragment {
             Toast.makeText(requireActivity(), "No Course found", Toast.LENGTH_SHORT).show();
         }
 
+        EditText searchView2 = view.findViewById(R.id.searchView2);
+        Button button2 = view.findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String search = searchView2.getText().toString();
+                if(!search.isEmpty()){
+                    List<Registration> itemList = databaseHelper.getRegistration(search);
+                    if (itemList != null) {
+                        Toast.makeText(requireActivity(), "Get Data successfully", Toast.LENGTH_SHORT).show();
+                        CaptionedImagesAdapter_view_section adapter = new CaptionedImagesAdapter_view_section(requireActivity(), itemList);
+                        myRecyclerView.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(requireActivity(), "No Course found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
         return view;
     }
 }

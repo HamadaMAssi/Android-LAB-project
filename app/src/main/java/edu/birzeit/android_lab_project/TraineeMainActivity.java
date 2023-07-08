@@ -126,7 +126,7 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
                 break;
 
             case R.id.nav_enrollCourse:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new EnrollInCourseFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SearchCoursesFragment()).commit();
                 break;
 
             case R.id.nav_previousCourses:

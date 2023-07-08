@@ -80,7 +80,7 @@ public class TraineeHomeFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new EnrollInCourseFragment()).commit();
+                        .replace(R.id.fragment_container, new SearchCoursesFragment()).commit();
             }
         });
         previousCourses.setOnClickListener(new View.OnClickListener() {

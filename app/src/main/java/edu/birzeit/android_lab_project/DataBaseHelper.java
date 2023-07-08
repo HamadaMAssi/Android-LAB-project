@@ -158,6 +158,26 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return registrations;
     }
+    public ArrayList<Registration> getRegistration(String title) {
+        ArrayList<Registration> registrations = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM Registration WHERE COURSE_TITLE LIKE ?", new String[]{"%" + title + "%"});
+        if (cursor.moveToFirst()) {
+            do {
+                String courseTitle = cursor.getString(1);
+                String InstructorEmail = cursor.getString(2);
+                String Deadline = cursor.getString(3);
+                String Start_Date = cursor.getString(4);
+                String schedule = cursor.getString(5);
+                String venue = cursor.getString(6);
+                Registration registration = new Registration(courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
+                registrations.add(registration);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return registrations;
+    }
 
     public Cursor getInstructors() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
