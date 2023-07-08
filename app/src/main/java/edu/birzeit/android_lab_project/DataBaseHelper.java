@@ -95,7 +95,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("COURSE_TITLE", newRegistration.getCOURSE_TITLE());
-        contentValues.put("InstructorEmail", newRegistration.getInstructorEmail());
+        contentValues.put("Email_Address", newRegistration.getInstructorEmail());
         contentValues.put("Deadline", newRegistration.getDeadline());
         contentValues.put("Start_Date", newRegistration.getStart_Date());
         contentValues.put("schedule", newRegistration.getSchedule());
@@ -124,19 +124,40 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                String courseTitle = cursor.getString(0);
-                String t = cursor.getString(1);
-                String p = cursor.getString(2);
-                String i = cursor.getString(3);
+                String courseTitle = cursor.getString(1);
+                String t = cursor.getString(2);
+                String p = cursor.getString(3);
+                String i = cursor.getString(4);
                 Course course = new Course(courseTitle, t, p, i);
+                System.out.println("\n\n\n\n"+ course.getMAIN_TOPICS());
                 courses.add(course);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
         return courses;
     }
 
+    public ArrayList<Registration> getAllRegistrations() {
+        ArrayList<Registration> registrations = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM Registration", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String courseTitle = cursor.getString(1);
+                String InstructorEmail = cursor.getString(2);
+                String Deadline = cursor.getString(3);
+                String Start_Date = cursor.getString(4);
+                String schedule = cursor.getString(5);
+                String venue = cursor.getString(6);
+                Registration registration = new Registration(courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
+                registrations.add(registration);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return registrations;
+    }
 
     public Cursor getInstructors() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
@@ -218,9 +239,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public Void deleteCourse(String COURSE_TITLE) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String[] args = {COURSE_TITLE};
-        sqLiteDatabase.delete( "Course","COURSE_TITLE = ?", args);
+        sqLiteDatabase.delete("Course", "COURSE_TITLE = ?", args);
+//        sqLiteDatabase.delete("TraineeReg", "COURSE_TITLE = ?", args);
+        sqLiteDatabase.delete("Registration", "COURSE_TITLE = ?", args);
         return null;
     }
+
+    public boolean checkCourseExistsInRegistration(String courseTitle) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(*) FROM Registration WHERE COURSE_TITLE = ?", new String[]{courseTitle});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return count > 0;
+    }
+
+
 
     public Cursor getAdminByEmail(String Email_Address) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
@@ -280,44 +317,83 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.rawQuery("SELECT * FROM Instructor WHERE Email_Address = '" + Email_Address + "';", null);
     }
 
-//    public Instructor getInstructorObjectByEmail(String Email_Address) {
-//        String emailAddress= "";
-//        String firstName= "";
-//        String lastName= "";
-//        String password = "";
-//        byte[] imageData = new byte[0];
-//        String Mobile_Number = "";
-//        String Address="";
-//        String Specialization="";
-//        String Degree="";
-//        ArrayList<String> Courses = new ArrayList<>();
+    public Instructor getInstructorObjectByEmail(String email) {
+        String emailAddress = "";
+        String firstName = "";
+        String lastName = "";
+        String password = "";
+        byte[] imageData = new byte[0];
+        String mobileNumber = "";
+        String address = "";
+        String specialization = "";
+        String degree = "";
+        ArrayList<String> courses = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM Instructor WHERE Email_Address = '" + email + "';", null);
+        if (cursor.moveToFirst()) {
+            emailAddress = cursor.getString(0);
+            firstName = cursor.getString(1);
+            lastName = cursor.getString(2);
+            password = cursor.getString(3);
+            imageData = cursor.getBlob(4);
+            mobileNumber = cursor.getString(5);
+            address = cursor.getString(6);
+            specialization = cursor.getString(7);
+            degree = cursor.getString(8);
+//            String coursesString = cursor.getString(9);
 //
-//        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-//        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM Instructor WHERE Email_Address = '" + Email_Address + "';", null);
-//        if (cursor.moveToFirst()) {
-//            emailAddress = cursor.getString(0);
-//            firstName = cursor.getString(1);
-//            lastName = cursor.getString(2);
-//            password = cursor.getString(3);
-//            imageData = cursor.getBlob(4);
-//            Mobile_Number = cursor.getString(5);
-//            Address = cursor.getString(6);
-//            Specialization = cursor.getString(7);
-//            Degree = cursor.getString(8);
-//            String coursesString = cursor.getString(9); // Assuming the column index is 9
-//
-//            if (coursesString != null) {
-//                String[] courseArray = coursesString.split(","); // Split the string by comma
-//                Courses.addAll(Arrays.asList(courseArray));
+//            if (coursesString != null && !coursesString.isEmpty()) {
+//                String[] courseArray = coursesString.split(",");
+//                courses.addAll(Arrays.asList(courseArray));
 //            }
-//        }
-//        cursor.close();
-//        return new Instructor(emailAddress, firstName, lastName, password, imageData, Mobile_Number, Address, Specialization, Degree,Courses);
-//    }
+        }
+        cursor.close();
+        return new Instructor(emailAddress, firstName, lastName, password, imageData, mobileNumber, address, specialization, degree, courses);
+    }
+
 
     public Cursor getInstCourses(String Email_Address) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT COURSE_TITLE FROM InstCourses WHERE Email_Address = '" + Email_Address + "';", null);
     }
+    public void updateAdmin(Admin admin) {
+        SQLiteDatabase db = getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put("First_Name", admin.getFirst_Name());
+        values.put("Last_Name", admin.getLast_Name());
+        values.put("Password", admin.getPassword());
+        values.put("Personal_Photo", admin.getPersonal_Photo());
+
+        db.update("Admin", values, "Email_Address = ?", new String[]{admin.getEmail_Address()});
+        db.close();
+    }
+    public void updateInstructor(Instructor instructor) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("First_Name", instructor.getFirst_Name());
+        values.put("Last_Name", instructor.getLast_Name());
+        values.put("Password", instructor.getPassword());
+        values.put("Personal_Photo", instructor.getPersonal_Photo());
+        values.put("Mobile_Number", instructor.getMobile_Number());
+        values.put("Address", instructor.getAddress());
+        values.put("Specialization", instructor.getSpecialization());
+        values.put("Degree", instructor.getDegree());
+        db.update("Instructor", values, "Email_Address = ?", new String[]{instructor.getEmail_Address()});
+        db.close();
+    }
+    public void updateTrainee(Trainee trainee) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("First_Name", trainee.getFirst_Name());
+        values.put("Last_Name", trainee.getLast_Name());
+        values.put("Password", trainee.getPassword());
+        values.put("Personal_Photo", trainee.getPersonal_Photo());
+        values.put("Mobile_Number", trainee.getMobile_Number());
+        values.put("Address", trainee.getAddress());
+        db.update("Trainee", values, "Email_Address = ?", new String[]{trainee.getEmail_Address()});
+        db.close();
+    }
 }

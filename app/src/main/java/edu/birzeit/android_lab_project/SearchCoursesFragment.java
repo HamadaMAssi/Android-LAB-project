@@ -3,10 +3,15 @@ package edu.birzeit.android_lab_project;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,8 +20,7 @@ import android.view.ViewGroup;
  */
 public class SearchCoursesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private RecyclerView myRecyclerView;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -59,6 +63,19 @@ public class SearchCoursesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_courses, container, false);
+        View view=  inflater.inflate(R.layout.fragment_search_courses, container, false);
+        DataBaseHelper databaseHelper = new DataBaseHelper(requireActivity(), "train", null, 1);
+        myRecyclerView = view.findViewById(R.id.myRecyclerView);
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        List<Registration> itemList = databaseHelper.getAllRegistrations();
+        if (itemList != null) {
+            Toast.makeText(requireActivity(), "Get Data successfully", Toast.LENGTH_SHORT).show();
+            CaptionedImagesAdapter_view_section adapter = new CaptionedImagesAdapter_view_section(requireActivity(), itemList);
+            myRecyclerView.setAdapter(adapter);
+        } else {
+            Toast.makeText(requireActivity(), "No Course found", Toast.LENGTH_SHORT).show();
+        }
+
+        return view;
     }
 }

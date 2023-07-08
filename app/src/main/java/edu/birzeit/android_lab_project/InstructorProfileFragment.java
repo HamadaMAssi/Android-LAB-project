@@ -1,15 +1,19 @@
 package edu.birzeit.android_lab_project;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -27,10 +31,10 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InstructorSignUpActivity extends AppCompatActivity {
 
-    private ImageView back, imageViewPhoto;
-    private Button signUpButton, cancelButton, adminSignUpButton, studentSignUpButton;
+public class InstructorProfileFragment extends Fragment {
+
+    private ImageView imageViewPhoto;
     private LinearLayout CoursesLayout;
     private EditText emailText;
     private EditText firstNameText;
@@ -41,39 +45,98 @@ public class InstructorSignUpActivity extends AppCompatActivity {
     private EditText addressText;
     private EditText specializationText;
     private RadioGroup degreeRadioGroup;
-    private LinearLayout personalPhoto;
-    private TextView textPhoto;
-
+    private ImageView personalPhoto;
     private Uri imageUri;
     private static final int GALLERY_REQUEST_CODE = 123;
+    private DataBaseHelper databasehelper;
 
+    private Button SaveModificationsButton;
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
+
+    public InstructorProfileFragment() {
+        // Required empty public constructor
+    }
+
+
+    public static InstructorProfileFragment newInstance(String param1, String param2) {
+        InstructorProfileFragment fragment = new InstructorProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_instructor_sign_up);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_instructor_profile, container, false);
 
-        signUpButton = (Button) findViewById(R.id.signUpButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
-        adminSignUpButton = (Button) findViewById(R.id.adminSignUpButton);
-        studentSignUpButton = (Button) findViewById(R.id.studentSignUpButton);
-        back = findViewById(R.id.back);
-        CoursesLayout = (LinearLayout) findViewById(R.id.CoursesLayout);
+        CoursesLayout = (LinearLayout) v.findViewById(R.id.CoursesLayout);
 
-        emailText = (EditText) findViewById(R.id.emailText);
-        firstNameText = (EditText) findViewById(R.id.firstNameText);
-        lastNameText = (EditText) findViewById(R.id.lastNameText);
-        passwordText = (EditText) findViewById(R.id.passwordText);
-        confirmPasswordText = (EditText) findViewById(R.id.confirmPasswordText);
-        mobileNumberText = (EditText) findViewById(R.id.mobileNumberText);
-        addressText = (EditText) findViewById(R.id.addressText);
-        specializationText = (EditText) findViewById(R.id.specializationText);
-        degreeRadioGroup = (RadioGroup) findViewById(R.id.degreeRadioGroup);
+        emailText = (EditText) v.findViewById(R.id.emailText);
+        firstNameText = (EditText) v.findViewById(R.id.firstNameText);
+        lastNameText = (EditText) v.findViewById(R.id.lastNameText);
+        passwordText = (EditText) v.findViewById(R.id.passwordText);
+        confirmPasswordText = (EditText) v.findViewById(R.id.confirmPasswordText);
+        mobileNumberText = (EditText) v.findViewById(R.id.mobileNumberText);
+        addressText = (EditText) v.findViewById(R.id.addressText);
+        specializationText = (EditText) v.findViewById(R.id.specializationText);
+        degreeRadioGroup = (RadioGroup) v.findViewById(R.id.degreeRadioGroup);
 
-        DataBaseHelper databasehelper = new DataBaseHelper(InstructorSignUpActivity.this, "train", null, 1);
+        imageViewPhoto = (ImageView) v.findViewById(R.id.imageViewPhoto);
+
+        databasehelper = new DataBaseHelper(requireContext(), "train", null, 1);
+
+        Bundle args = getArguments();
+        String email = args.getString("email");
+        Instructor user = databasehelper.getInstructorObjectByEmail(email);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(user.getPersonal_Photo(), 0, user.getPersonal_Photo().length);
+
+        emailText.setText(user.getEmail_Address());
+        firstNameText.setText(user.getFirst_Name());
+        lastNameText.setText(user.getLast_Name());
+        passwordText.setText(user.getPassword());
+        confirmPasswordText.setText(user.getPassword());
+        imageViewPhoto.setImageBitmap(bitmap);
+        mobileNumberText.setText(user.getMobile_Number());
+        addressText.setText(user.getAddress());
+        specializationText.setText(user.getSpecialization());
+
+        String degree = user.getDegree();
+        int radioButtonId = -1;
+
+        switch (degree) {
+            case "BSc":
+                radioButtonId = R.id.degreeBSc;
+                break;
+            case "MSc":
+                radioButtonId = R.id.degreeMSc;
+                break;
+            case "PhD":
+                radioButtonId = R.id.degreePhD;
+                break;
+        }
+
+        if (radioButtonId != -1) {
+            RadioButton radioButton = degreeRadioGroup.findViewById(radioButtonId);
+            radioButton.setChecked(true);
+        }
+
         Cursor Courses_Data = databasehelper.getCourses();
         ArrayList<String> Courses = new ArrayList<String>();
         while (Courses_Data.moveToNext()){
@@ -83,20 +146,20 @@ public class InstructorSignUpActivity extends AppCompatActivity {
 
         ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
         for (int i = 0; i<Courses.size(); i+=2){
-            LinearLayout twoCourses = new LinearLayout(InstructorSignUpActivity.this);
+            LinearLayout twoCourses = new LinearLayout(requireContext());
             twoCourses.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.weight = 1.0f;
             twoCourses.setLayoutParams(params);
             twoCourses.setVisibility(View.VISIBLE);
             if (Courses.size() > 1  && !Courses.get(i).isEmpty() && !Courses.get(i+1).isEmpty()){
-                CheckBox Course1 = new CheckBox(InstructorSignUpActivity.this);
+                CheckBox Course1 = new CheckBox(requireContext());
                 Course1.setText(Courses.get(i));
                 Course1.setChecked(false);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.weight = 1.0f;
                 Course1.setLayoutParams(layoutParams);
-                CheckBox Course2 = new CheckBox(InstructorSignUpActivity.this);
+                CheckBox Course2 = new CheckBox(requireContext());
                 Course2.setText(Courses.get(i+1));
                 Course2.setChecked(false);
                 Course2.setLayoutParams(layoutParams);
@@ -105,7 +168,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 checkBoxes.add(Course1);
                 checkBoxes.add(Course2);
             } else {
-                CheckBox Course1 = new CheckBox(InstructorSignUpActivity.this);
+                CheckBox Course1 = new CheckBox(requireContext());
                 Course1.setText(Courses.get(i));
                 Course1.setChecked(false);
                 Course1.setVisibility(View.VISIBLE);
@@ -118,104 +181,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
             CoursesLayout.addView(twoCourses,params);
         }
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(InstructorSignUpActivity.this,MainActivity2.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(InstructorSignUpActivity.this,MainActivity2.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        adminSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(InstructorSignUpActivity.this,AdminSignUpActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        studentSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(InstructorSignUpActivity.this,TraineeSignUpActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = emailText.getText().toString();
-                String firstName = firstNameText.getText().toString();
-                String lastName = lastNameText.getText().toString();
-                String password = passwordText.getText().toString();
-                String confirmPassword = confirmPasswordText.getText().toString();
-                byte[] imageData = new byte[0];
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                    imageData = getBytesFromInputStream(inputStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String mobileNumber = mobileNumberText.getText().toString();
-                String address = addressText.getText().toString();
-                String specialization = specializationText.getText().toString();
-                DataBaseHelper databasehelper = new DataBaseHelper(InstructorSignUpActivity.this, "train", null, 1);
-                Cursor Admin_Data = databasehelper.getAdminByEmail(email);
-                Cursor Trainee_Data = databasehelper.getTraineeByEmail(email);
-                Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
-                if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
-                    if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
-                            int selectedDegree = degreeRadioGroup.getCheckedRadioButtonId();
-                            if(selectedDegree != -1){
-                                RadioButton radioButton = (RadioButton) findViewById(selectedDegree);
-                                String degree = radioButton.getText().toString();
-                                ArrayList<String> Courses = getInstCources(checkBoxes);
-                                Instructor instructor = new Instructor(email,firstName,lastName,password,imageData,mobileNumber,address,specialization,degree, Courses);
-                                databasehelper.newInstructor(instructor);
-                                for (int j=0; j<Courses.size(); j++){
-                                    databasehelper.newInstCourses(Courses.get(j),email);
-                                }
-                                Intent intent = new Intent(InstructorSignUpActivity.this,InstructorMainActivity.class);
-                                intent.putExtra("email", instructor.getEmail_Address());
-                                intent.putExtra("firstName", instructor.getFirst_Name());
-                                intent.putExtra("lastName", instructor.getLast_Name());
-                                intent.putExtra("password", instructor.getPassword());
-                                intent.putExtra("mobileNumber", instructor.getMobile_Number());
-                                intent.putExtra("address", instructor.getAddress());
-                                intent.putExtra("specialization", instructor.getSpecialization());
-                                intent.putExtra("degree", instructor.getDegree());
-                                InstructorSignUpActivity.this.startActivity(intent);
-                                finish();
-                            } else {
-                                Toast toast =Toast.makeText(InstructorSignUpActivity.this,
-                                        "Please select your degree",Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                        }
-                    } else {
-                        Toast toast =Toast.makeText(InstructorSignUpActivity.this,
-                                "Confirm password is incorrect",Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-
-                }else {
-                    Toast toast =Toast.makeText(InstructorSignUpActivity.this,
-                            "This email has been used by another user",Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });
-        personalPhoto = findViewById(R.id.personalPhoto);
+        personalPhoto = v.findViewById(R.id.personalPhoto);
         personalPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,6 +190,79 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 startActivityForResult(intent, GALLERY_REQUEST_CODE);
             }
         });
+
+        SaveModificationsButton = v.findViewById(R.id.SaveModificationsButton);
+        SaveModificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailText.getText().toString();
+                String firstName = firstNameText.getText().toString();
+                String lastName = lastNameText.getText().toString();
+                String password = passwordText.getText().toString();
+                String confirmPassword = confirmPasswordText.getText().toString();
+                String mobileNumber = mobileNumberText.getText().toString();
+                String address = addressText.getText().toString();
+                String specialization = specializationText.getText().toString();
+
+                byte[] imageData = new byte[0];
+                if(imageUri == null){
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(user.getPersonal_Photo(), 0, user.getPersonal_Photo().length);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    imageData = outputStream.toByteArray();
+                }else{
+                    try {
+                        InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
+                        imageData = getBytesFromInputStream(inputStream);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                databasehelper = new DataBaseHelper(requireContext(), "train", null, 1);
+                Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
+                if (Instructor_Data.moveToNext()) {
+                    if (password.equals(confirmPassword)) {
+                        if (validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)) {
+
+                            int selectedDegree = degreeRadioGroup.getCheckedRadioButtonId();
+                            if(selectedDegree != -1){
+                                RadioButton radioButton = (RadioButton) v.findViewById(selectedDegree);
+                                String degree = radioButton.getText().toString();
+                                ArrayList<String> Courses = getInstCources(checkBoxes);
+                                Instructor instructor = new Instructor(email,firstName,lastName,password,imageData,mobileNumber,address,specialization,degree, Courses);
+                                databasehelper.updateInstructor(instructor);
+                                for (int j=0; j<Courses.size(); j++){
+                                    databasehelper.newInstCourses(Courses.get(j),email);
+                                }
+                                Intent intent = new Intent(requireContext(),InstructorMainActivity.class);
+                                intent.putExtra("email", instructor.getEmail_Address());
+                                intent.putExtra("firstName", instructor.getFirst_Name());
+                                intent.putExtra("lastName", instructor.getLast_Name());
+                                intent.putExtra("password", instructor.getPassword());
+                                intent.putExtra("mobileNumber", instructor.getMobile_Number());
+                                intent.putExtra("address", instructor.getAddress());
+                                intent.putExtra("specialization", instructor.getSpecialization());
+                                intent.putExtra("degree", instructor.getDegree());
+                                requireContext().startActivity(intent);
+                                requireActivity().finish();
+                            } else {
+                                Toast toast =Toast.makeText(requireContext(),
+                                        "Please select your degree",Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(requireContext(), "Confirm password is incorrect", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Toast toast = Toast.makeText(requireContext(), "Instructor data not found", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+        return v;
     }
 
     private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
@@ -237,13 +276,10 @@ public class InstructorSignUpActivity extends AppCompatActivity {
         return byteBuffer.toByteArray();
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         imageUri = data.getData();
-        textPhoto = findViewById(R.id.textPhoto);
-        textPhoto.setText(imageUri.toString());
-        imageViewPhoto = findViewById(R.id.imageViewPhoto);
         imageViewPhoto.setImageURI(imageUri);
     }
 
@@ -254,12 +290,12 @@ public class InstructorSignUpActivity extends AppCompatActivity {
 
         int passSize = password.length();
         if(passSize < 8){
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "password must be at least 8 character",Toast.LENGTH_SHORT);
             toast.show();
             return false;
         } else if (passSize > 15) {
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "password must be at most 15 character",Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -280,20 +316,20 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 if (hasNumber){
                     return true;
                 }else {
-                    Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+                    Toast toast =Toast.makeText(requireContext(),
                             "password must contain at least one number",Toast.LENGTH_SHORT);
                     toast.show();
                     return false;
                 }
             }else {
-                Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+                Toast toast =Toast.makeText(requireContext(),
                         "password must contain at least one uppercase letter",Toast.LENGTH_SHORT);
                 toast.show();
                 return false;
             }
 
         }else {
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "password must contain at least one lowercase letter",Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -305,12 +341,12 @@ public class InstructorSignUpActivity extends AppCompatActivity {
 
         int nameSize = name.length();
         if(nameSize < 3){
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "first/last name must be at least 3 character",Toast.LENGTH_SHORT);
             toast.show();
             return false;
         } else if (nameSize > 20) {
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "first/last name must be at most 20 character",Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -330,7 +366,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
         if(matcher.matches()){
             return true;
         } else{
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "email format is wrong",Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -349,7 +385,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
     }
     public boolean validatePhoto(byte [] p) {
         if(p == null || p.length == 0 ){
-            Toast toast =Toast.makeText(InstructorSignUpActivity.this,
+            Toast toast =Toast.makeText(requireContext(),
                     "photo is empty",Toast.LENGTH_SHORT);
             toast.show();
             return false;
@@ -357,4 +393,5 @@ public class InstructorSignUpActivity extends AppCompatActivity {
             return true;
         }
     }
+
 }

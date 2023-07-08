@@ -75,7 +75,7 @@ public class EditDeleteCourseFragment extends Fragment {
             CaptionedImagesAdapter_course adapter = new CaptionedImagesAdapter_course(requireActivity(), itemList);
             myRecyclerView.setAdapter(adapter);
         } else {
-            Toast.makeText(requireActivity(), "No Trainees found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), "No Course found", Toast.LENGTH_SHORT).show();
         }
         return view;
     }

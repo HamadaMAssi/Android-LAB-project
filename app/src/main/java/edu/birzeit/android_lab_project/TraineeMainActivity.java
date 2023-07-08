@@ -24,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TraineeMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +68,14 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
 
         View headerView = navigationView.getHeaderView(0);
 
-        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        CircleImageView userImage = headerView.findViewById(R.id.imageViewPhoto);
         TextView userName = headerView.findViewById(R.id.userName);
 
 
         DataBaseHelper databasehelper = new DataBaseHelper(TraineeMainActivity.this, "train", null, 1);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
-
-//        userImage.setImageURI(Uri.parse(intent.getStringExtra("photo")));
-//        userName.setText(email);
-
+        email = intent.getStringExtra("email");
         Trainee user = databasehelper.getTraineeObjectByEmail(email);
         Bitmap bitmap = BitmapFactory.decodeByteArray(user.getPersonal_Photo(), 0, user.getPersonal_Photo().length);
         userImage.setImageBitmap(bitmap);
@@ -104,7 +101,11 @@ public class TraineeMainActivity extends AppCompatActivity implements Navigation
 
             case R.id.nav_account:
                 Toast.makeText(this, "account!", Toast.LENGTH_SHORT).show();
-                break;
+                TraineeProfileFragment fragment = new TraineeProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("email", email);
+                fragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();                break;
 
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();

@@ -14,50 +14,80 @@
         android:layout_height="120dp"
         android:src="@drawable/edit" />
 
-    <EditText
+    <TextView
         android:id="@+id/textTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:paddingTop="16dp"
+        android:text="Name"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:textSize="18sp" />
 
 
-    <EditText
-        android:id="@+id/textTopic"
+    <TextView
+        android:id="@+id/textInstructorEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:paddingTop="16dp"
         android:text="math"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/textPrerequisites"
+    <TextView
+        android:id="@+id/textDeadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:gravity="center"
         android:paddingTop="16dp"
         android:text="prerequisites"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/textStart_Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:text="Name"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/textschedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:text="math"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textvenue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:text="prerequisites"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
     <Button
-        android:id="@+id/editButton"
+        android:id="@+id/registrationButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/btn_style_active"
-        android:text="edit"
+        android:text="registration"
         android:textColor="@color/white" />
 
 </LinearLayout>

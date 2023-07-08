@@ -10,7 +10,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/userImage"
+        android:id="@+id/imageViewPhoto"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/messi" />

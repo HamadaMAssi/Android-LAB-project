@@ -46,24 +46,15 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/editButton"
+                android:id="@+id/registrationButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_style_active"
-                android:text="Edit"
+                android:text="registration"
                 android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_style"
-                android:text="Delete"
-                android:textColor="@color/color1" />
         </LinearLayout>
 
     </LinearLayout>

@@ -5,28 +5,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
@@ -38,6 +28,7 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private DrawerLayout drawerLayout;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +75,14 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
 
         View headerView = navigationView.getHeaderView(0);
 
-        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        CircleImageView userImage = headerView.findViewById(R.id.imageViewPhoto);
         TextView userName = headerView.findViewById(R.id.userName);
 
 
         DataBaseHelper databasehelper = new DataBaseHelper(AdminMainActivity.this, "train", null, 1);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
+        email = intent.getStringExtra("email");
 
 //        userImage.setImageURI(Uri.parse(intent.getStringExtra("photo")));
 //        userName.setText(email);
@@ -153,6 +144,11 @@ public class AdminMainActivity extends AppCompatActivity implements NavigationVi
 
             case R.id.nav_account:
                 Toast.makeText(this, "account!", Toast.LENGTH_SHORT).show();
+                AdminProfileFragment fragment = new AdminProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("email", email); // Replace "myString" with the desired key and "Hello, world!" with your actual string
+                fragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
 
             case R.id.nav_logout:

@@ -25,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InstructorMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout;
-
+    private String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +68,14 @@ public class InstructorMainActivity extends AppCompatActivity implements Navigat
 
         View headerView = navigationView.getHeaderView(0);
 
-        CircleImageView userImage = headerView.findViewById(R.id.userImage);
+        CircleImageView userImage = headerView.findViewById(R.id.imageViewPhoto);
         TextView userName = headerView.findViewById(R.id.userName);
 
 
         DataBaseHelper databasehelper = new DataBaseHelper(InstructorMainActivity.this, "train", null, 1);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
+        email = intent.getStringExtra("email");
 
         Cursor cursor = databasehelper.getInstructorByEmail(email);
         if (cursor.moveToFirst()) {
@@ -104,6 +104,11 @@ public class InstructorMainActivity extends AppCompatActivity implements Navigat
 
             case R.id.nav_account:
                 Toast.makeText(this, "account!", Toast.LENGTH_SHORT).show();
+                InstructorProfileFragment fragment = new InstructorProfileFragment();
+                Bundle args = new Bundle();
+                args.putString("email", email);
+                fragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
 
             case R.id.nav_logout:
