@@ -19,13 +19,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE Course(ID SERIAL PRIMARY KEY, COURSE_TITLE TEXT UNIQUE, MAIN_TOPICS TEXT, PREREQUISITES TEXT,  PHOTO TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE Course(ID INT PRIMARY KEY, COURSE_TITLE TEXT UNIQUE, MAIN_TOPICS TEXT, PREREQUISITES TEXT,  PHOTO TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Admin(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Trainee(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE Instructor(Email_Address TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT,  Password TEXT, Personal_Photo TEXT, Mobile_Number TEXT, Address TEXT, Specialization TEXT, Degree TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE InstCourses(COURSE_TITLE SERIAL, Email_Address SERIAL, PRIMARY KEY (COURSE_TITLE,Email_Address))");
-        sqLiteDatabase.execSQL("CREATE TABLE Registration(ID SERIAL PRIMARY KEY, COURSE_TITLE TEXT, Email_Address TEXT, Deadline TEXT, Start_Date TEXT, schedule TEXT, venue TEXT)");
-        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(Email_Address TEXT, Registration_ID SERIAL,Reg_State BOOLEAN, PRIMARY KEY (Email_Address,Registration_ID))");
+        sqLiteDatabase.execSQL("CREATE TABLE InstCourses(COURSE_TITLE TEXT, Email_Address TEXT, PRIMARY KEY (COURSE_TITLE,Email_Address), FOREIGN KEY (COURSE_TITLE) REFERENCES Course(COURSE_TITLE), FOREIGN KEY (Email_Address) REFERENCES Instructor(Email_Address))");
+        sqLiteDatabase.execSQL("CREATE TABLE Registration(ID INT PRIMARY KEY AUTOINCREMENT, COURSE_TITLE TEXT, Email_Address TEXT, Deadline TEXT, Start_Date TEXT, schedule TEXT, venue TEXT, FOREIGN KEY (COURSE_TITLE) REFERENCES Course(COURSE_TITLE), FOREIGN KEY (Email_Address) REFERENCES Instructor(Email_Address))");
+        sqLiteDatabase.execSQL("CREATE TABLE TraineeReg(Email_Address TEXT, Registration_ID INT,Reg_State TEXT, PRIMARY KEY (Email_Address,Registration_ID), FOREIGN KEY (Email_Address) REFERENCES Trainee(Email_Address), FOREIGN KEY (Registration_ID) REFERENCES Registration(ID))");
 
     }
 
@@ -103,17 +103,95 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert("Registration", null, contentValues);
     }
 
-    public void newTraineeReg(int trainee_ID, int Registration_ID) {
+    public void newTraineeReg(String Email_Address, int Registration_ID) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("trainee_ID", trainee_ID);
+        contentValues.put("Email_Address", Email_Address);
         contentValues.put("Registration_ID", Registration_ID);
+        contentValues.put("Reg_State", "None");
         sqLiteDatabase.insert("TraineeReg", null, contentValues);
     }
 
     public Cursor getCourses() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT COURSE_TITLE FROM Course" , null);
+    }
+
+    public ArrayList<Integer> getRegistrationId(String COURSE_TITLE) {
+        ArrayList<Integer> RegistrationId = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT ID FROM Registration WHERE COURSE_TITLE = '" + COURSE_TITLE + "';" , null);
+        if (cursor.moveToFirst()) {
+            do {
+                RegistrationId.add(cursor.getInt(0));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return RegistrationId;
+    }
+
+    public String getTraineeName(String Email_Address) {
+        String name = null;
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT First_Name,Last_Name FROM Trainee WHERE Email_Address = '" + Email_Address + "';" , null);
+        if (cursor.moveToNext()) {
+            System.out.println("getTraineeName 1");
+
+            name = cursor.getString(0) + " " + cursor.getString(1);
+            System.out.println("getTraineeName 2 : " + name);
+
+
+        }
+        cursor.close();
+        return name;
+    }
+
+    public String getCOURSE_TITLE(int Registration_ID) {
+        String name = null;
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COURSE_TITLE FROM Registration WHERE ID = " + Registration_ID + ";" , null);
+        if (cursor.moveToNext()) {
+            System.out.println("getCOURSE_TITLE 1");
+
+            name = cursor.getString(0);
+            System.out.println("getCOURSE_TITLE 2 : " + name);
+
+        }
+        cursor.close();
+        return name;
+    }
+
+    public ArrayList<TraineeReg> getTraineesReg() {
+        ArrayList<TraineeReg> traineeReg = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor1 = sqLiteDatabase.rawQuery("SELECT * FROM TraineeReg WHERE Reg_State = 'None'" , null);
+
+        while (cursor1.moveToNext()) {
+            String Email_Address = cursor1.getString(0);
+            System.out.println("getTraineesReg Email_Address : " + Email_Address);
+            int Registration_ID = cursor1.getInt(1);
+            System.out.println("getTraineesReg Registration_ID : " + Registration_ID);
+            String Reg_State = cursor1.getString(2);
+            String traineeName = "";
+            String COURSE_TITLE = "";
+            TraineeReg traineeReg1 = new TraineeReg(Email_Address, traineeName, Registration_ID, COURSE_TITLE,Reg_State);
+            traineeReg.add(traineeReg1);
+        }
+
+        cursor1.close();
+        return traineeReg;
+    }
+
+    public Void acceptTraineesRegState(TraineeReg newTraineeReg) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.rawQuery("UPDATE TraineeReg SET Reg_State = 'Accepted' WHERE Email_Address = '" + newTraineeReg.getEmail_Address() + "' AND Registration_ID = " + newTraineeReg.getRegistration_ID() + ";" , null);
+        return null;
+    }
+
+    public Void rejectTraineesRegState(TraineeReg newTraineeReg) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.rawQuery("DELETE FROM TraineeReg WHERE Email_Address = '" + newTraineeReg.getEmail_Address() + "' AND Registration_ID = " + newTraineeReg.getRegistration_ID() + ";" , null);
+        return null;
     }
 
     public ArrayList<Course> getAllCourses() {
@@ -145,13 +223,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
+                int Registration_ID = cursor.getInt(0);
+                System.out.println("getAllRegistrations Registration_ID: " + Registration_ID);
                 String courseTitle = cursor.getString(1);
                 String InstructorEmail = cursor.getString(2);
                 String Deadline = cursor.getString(3);
                 String Start_Date = cursor.getString(4);
                 String schedule = cursor.getString(5);
                 String venue = cursor.getString(6);
-                Registration registration = new Registration(courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
+                Registration registration = new Registration(Registration_ID,courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
                 registrations.add(registration);
             } while (cursor.moveToNext());
         }
@@ -165,13 +245,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM Registration WHERE COURSE_TITLE LIKE ?", new String[]{"%" + title + "%"});
         if (cursor.moveToFirst()) {
             do {
+                int Registration_ID = cursor.getInt(0);
                 String courseTitle = cursor.getString(1);
                 String InstructorEmail = cursor.getString(2);
                 String Deadline = cursor.getString(3);
                 String Start_Date = cursor.getString(4);
                 String schedule = cursor.getString(5);
                 String venue = cursor.getString(6);
-                Registration registration = new Registration(courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
+                Registration registration = new Registration(Registration_ID,courseTitle, InstructorEmail, Deadline, Start_Date, schedule, venue);
                 registrations.add(registration);
             } while (cursor.moveToNext());
         }
@@ -257,11 +338,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public Void deleteCourse(String COURSE_TITLE) {
+        ArrayList<Integer> RegistrationID = getRegistrationId(COURSE_TITLE);
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String[] args = {COURSE_TITLE};
         sqLiteDatabase.delete("Course", "COURSE_TITLE = ?", args);
 //        sqLiteDatabase.delete("TraineeReg", "COURSE_TITLE = ?", args);
         sqLiteDatabase.delete("Registration", "COURSE_TITLE = ?", args);
+        for (int i=0; i<RegistrationID.size(); i++){
+            sqLiteDatabase.rawQuery("DELETE FROM TraineeReg WHERE Registration_ID = " + RegistrationID.get(i) + ";", null);
+        }
         return null;
     }
 

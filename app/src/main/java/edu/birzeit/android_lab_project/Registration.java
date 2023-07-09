@@ -3,6 +3,8 @@ package edu.birzeit.android_lab_project;
 import java.util.ArrayList;
 
 public class Registration {
+
+    private int Registration_ID;
     private String COURSE_TITLE;
     private String InstructorEmail;
     private String Deadline;
@@ -12,7 +14,7 @@ public class Registration {
 
     private ArrayList<String> Students;
 
-    public Registration(String COURSE_TITLE, String instructorEmail, String deadline, String start_Date, String schedule, String venue) {
+    public Registration(int Registration_ID, String COURSE_TITLE, String instructorEmail, String deadline, String start_Date, String schedule, String venue) {
         this.COURSE_TITLE = COURSE_TITLE;
         InstructorEmail = instructorEmail;
         Deadline = deadline;
@@ -20,6 +22,14 @@ public class Registration {
         this.schedule = schedule;
         this.venue = venue;
         Students = new ArrayList<String>();
+    }
+
+    public int getRegistration_ID() {
+        return Registration_ID;
+    }
+
+    public void setRegistration_ID(int registration_ID) {
+        Registration_ID = registration_ID;
     }
 
     public String getCOURSE_TITLE() {

@@ -4,9 +4,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,10 +46,16 @@ public class TraineeSignUpActivity extends AppCompatActivity {
     private Uri imageUri;
     private static final int GALLERY_REQUEST_CODE = 123;
 
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainee_sign_up);
+
+        prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -103,18 +111,20 @@ public class TraineeSignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 String email = emailText.getText().toString();
                 String firstName = firstNameText.getText().toString();
                 String lastName = lastNameText.getText().toString();
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
                 byte[] imageData = new byte[0];
-                try {
+                /*try {
                     InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     imageData = getBytesFromInputStream(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
                 String mobileNumber = mobileNumberText.getText().toString();
                 String address = addressText.getText().toString();
                 DataBaseHelper databasehelper = new DataBaseHelper(TraineeSignUpActivity.this, "train", null, 1);
@@ -123,9 +133,12 @@ public class TraineeSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){ //&& validatePhoto(imageData)){
                             Trainee trainee = new Trainee(email,firstName,lastName,password,imageData,mobileNumber,address);
                             databasehelper.newTrainee(trainee);
+                            editor.putString("EMAIL", email);
+                            editor.putString("PASS", password);
+                            editor.commit();
                             Intent intent = new Intent(TraineeSignUpActivity.this,TraineeMainActivity.class);
                             intent.putExtra("email", trainee.getEmail_Address());
                             intent.putExtra("firstName", trainee.getFirst_Name());

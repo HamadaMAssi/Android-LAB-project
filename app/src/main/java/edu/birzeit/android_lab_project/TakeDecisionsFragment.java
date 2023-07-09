@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,13 +69,17 @@ public class TakeDecisionsFragment extends Fragment {
         myRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         DataBaseHelper databaseHelper = new DataBaseHelper(requireActivity(), "train", null, 1);
 
-        List<Trainee> itemList = databaseHelper.getAllTrainees();
+        ArrayList<TraineeReg> itemList = databaseHelper.getTraineesReg();
+        for (int i=0; i<itemList.size(); i++){
+            itemList.get(i).setCOURSE_TITLE(databaseHelper.getCOURSE_TITLE(itemList.get(i).getRegistration_ID()));
+            itemList.get(i).setTrainee_Name(databaseHelper.getTraineeName(itemList.get(i).getEmail_Address()));
+        }
         if (itemList != null) {
             Toast.makeText(requireActivity(), "Get Data successfully", Toast.LENGTH_SHORT).show();
-            CaptionedImagesAdapter_trainee adapter = new CaptionedImagesAdapter_trainee(requireActivity(), itemList);
+            CaptionedImagesAdapter_take_decisions adapter = new CaptionedImagesAdapter_take_decisions(requireActivity(), itemList);
             myRecyclerView.setAdapter(adapter);
         } else {
-            Toast.makeText(requireActivity(), "No Trainees found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), "No Request found", Toast.LENGTH_SHORT).show();
         }
 
         return view;

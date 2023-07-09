@@ -2,13 +2,18 @@ package edu.birzeit.android_lab_project;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -47,7 +52,19 @@ public class CaptionedImagesAdapter_view_section extends RecyclerView.Adapter<Ca
         registrationButton.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                DataBaseHelper databasehelper = new DataBaseHelper(v.getContext(), "train", null, 1);
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                String email = prefs.getString("EMAIL", "");
+
+                databasehelper.newTraineeReg(email,item.getRegistration_ID());
+                Toast.makeText(context, "Sent request", Toast.LENGTH_SHORT).show();
+
+                AppCompatActivity activity = (AppCompatActivity) context;
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new SearchCoursesFragment())
+                        .commit();
             }
         });
     }

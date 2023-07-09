@@ -159,12 +159,12 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
                 byte[] imageData = new byte[0];
-                try {
+                /*try {
                     InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     imageData = getBytesFromInputStream(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
                 String mobileNumber = mobileNumberText.getText().toString();
                 String address = addressText.getText().toString();
                 String specialization = specializationText.getText().toString();
@@ -174,7 +174,7 @@ public class InstructorSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){ //&& validatePhoto(imageData)){
                             int selectedDegree = degreeRadioGroup.getCheckedRadioButtonId();
                             if(selectedDegree != -1){
                                 RadioButton radioButton = (RadioButton) findViewById(selectedDegree);

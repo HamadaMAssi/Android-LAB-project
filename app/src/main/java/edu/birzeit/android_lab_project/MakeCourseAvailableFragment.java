@@ -232,7 +232,7 @@ public class MakeCourseAvailableFragment extends Fragment {
                                 "please fill venue field!!",Toast.LENGTH_SHORT);
                         toast.show();
                     }else{
-                        Registration registration = new Registration(courseTitle,instructorEmail,Deadline,StartDate,schedule,venue);
+                        Registration registration = new Registration(0,courseTitle,instructorEmail,Deadline,StartDate,schedule,venue);
                         databasehelper.newRegistration(registration);
                         Toast toast =Toast.makeText(requireActivity(),
                                 "Registration Added successfully",Toast.LENGTH_SHORT);
