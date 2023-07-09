@@ -104,12 +104,12 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 String confirmPassword = confirmPasswordText.getText().toString();
 //                String photo = imageUri.toString();
                 byte[] imageData = new byte[0];
-                try {
+                /*try {
                     InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     imageData = getBytesFromInputStream(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
 
 
                 DataBaseHelper databasehelper = new DataBaseHelper(AdminSignUpActivity.this, "train", null, 1);
@@ -118,7 +118,7 @@ public class AdminSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){// && validatePhoto(imageData)){
                             Admin admin = new Admin(email,firstName,lastName,password,imageData);
                             databasehelper.newAdmin(admin);
                             Intent intent = new Intent(AdminSignUpActivity.this,AdminMainActivity.class);
