@@ -119,12 +119,12 @@ public class TraineeSignUpActivity extends AppCompatActivity {
                 String password = passwordText.getText().toString();
                 String confirmPassword = confirmPasswordText.getText().toString();
                 byte[] imageData = new byte[0];
-                /*try {
+                try {
                     InputStream inputStream = getContentResolver().openInputStream(imageUri);
                     imageData = getBytesFromInputStream(inputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }*/
+                }
                 String mobileNumber = mobileNumberText.getText().toString();
                 String address = addressText.getText().toString();
                 DataBaseHelper databasehelper = new DataBaseHelper(TraineeSignUpActivity.this, "train", null, 1);
@@ -133,7 +133,7 @@ public class TraineeSignUpActivity extends AppCompatActivity {
                 Cursor Instructor_Data = databasehelper.getInstructorByEmail(email);
                 if(!Admin_Data.moveToNext() && !Trainee_Data.moveToNext() && !Instructor_Data.moveToNext()){
                     if (password.equals(confirmPassword)){
-                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email)){ //&& validatePhoto(imageData)){
+                        if(validatePassword(password) && validateName(firstName) && validateName(lastName) && validateEmail(email) && validatePhoto(imageData)){
                             Trainee trainee = new Trainee(email,firstName,lastName,password,imageData,mobileNumber,address);
                             databasehelper.newTrainee(trainee);
                             editor.putString("EMAIL", email);
